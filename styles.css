@@ -1,95 +1,63 @@
 :root {
-  --main-color: #00f2ff; /* CAMBIA ESTO PARA PERSONALIZAR EL COLOR */
-  --bg-color: #0a0a0a;
+    --neon-color: #ff0055;
+    --bg-dark: #000000;
 }
+
+/* ... (mantén el código anterior del body y clock-circle) ... */
 
 body {
-  background-color: var(--bg-color);
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-family: 'Arial', sans-serif;
-  overflow: hidden;
+    background-color: var(--bg-dark);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    overflow: hidden;
 }
 
-.main-container {
-  text-align: center;
-}
-
-/* El Círculo Central */
 .clock-circle {
-  width: 450px;
-  height: 450px;
-  border: 8px solid var(--main-color);
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
-  box-shadow: 0 0 20px var(--main-color), inset 0 0 20px var(--main-color);
-  transition: all 0.5s ease;
+    width: 550px;
+    height: 550px;
+    border: 5px solid var(--neon-color);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 30px var(--neon-color), inset 0 0 30px var(--neon-color);
+    background: radial-gradient(circle, #111 0%, #000 100%);
+    position: relative;
 }
 
-/* Animación de Alarma (El borde parpadea en rojo) */
-.alarm-active {
-  animation: pulse-red 0.8s infinite;
-  border-color: #ff0000 !important;
-  box-shadow: 0 0 40px #ff0000, inset 0 0 20px #ff0000 !important;
+/* Estilo del Icono de Mute */
+.mute-icon {
+    position: absolute;
+    top: 60px;
+    right: 120px;
+    font-size: 24px;
+    color: var(--neon-color);
+    cursor: pointer;
+    text-shadow: 0 0 10px var(--neon-color);
+    transition: 0.3s;
+    z-index: 10;
 }
 
-@keyframes pulse-red {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+.mute-icon:hover {
+    transform: scale(1.2);
 }
 
-#time {
-  font-size: 70px;
-  color: white;
-  text-shadow: 0 0 10px var(--main-color);
-  margin-bottom: 0;
-}
-
-#ampm {
-  color: var(--main-color);
-  font-size: 20px;
-  font-weight: bold;
-}
-
-/* Controles y Botones */
-.controls {
-  margin-top: 30px;
-}
-
-#alarmTime {
-  background: transparent;
-  border: 1px solid var(--main-color);
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
-  margin-bottom: 15px;
-}
-
-.btn-neon {
-  background: transparent;
-  color: white;
-  border: 2px solid var(--main-color);
-  padding: 10px 15px;
-  margin: 5px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-/* Efecto Neón al pasar el cursor */
-.btn-neon:hover {
-  background: var(--main-color);
-  color: black;
-  box-shadow: 0 0 20px var(--main-color);
-  text-shadow: none;
-}
+/* Resto de estilos anteriores */
+.time-display { text-align: center; margin-bottom: 10px; }
+#time { font-size: 85px; font-weight: bold; text-shadow: 0 0 20px var(--neon-color); line-height: 1; }
+#ampm { font-size: 25px; color: var(--neon-color); font-weight: bold; margin-top: 5px; }
+.titulo-reloj { font-size: 20px; text-transform: uppercase; letter-spacing: 6px; margin: 20px 0; color: white; opacity: 0.8; }
+.controls { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+#alarmTime { background: #1a1a1a; border: 2px solid var(--neon-color); color: white; padding: 10px; border-radius: 10px; font-size: 20px; text-align: center; outline: none; }
+.btn-neon { background: transparent; color: white; border: 2px solid var(--neon-color); padding: 12px 25px; margin: 5px; border-radius: 50px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+.btn-neon:hover { background: var(--neon-color); box-shadow: 0 0 40px var(--neon-color); color: black; }
+.btn-stop { background: white; color: black; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; animation: blink 0.5s infinite; }
+@keyframes blink { 50% { opacity: 0.5; } }
+.alarm-ringing { animation: alarm-pulse 0.4s infinite; }
+@keyframes alarm-pulse { 0% { transform: scale(1); border-color: var(--neon-color); } 50% { transform: scale(1.03); border-color: #fff; box-shadow: 0 0 60px #fff; } 100% { transform: scale(1); border-color: var(--neon-color); } }
