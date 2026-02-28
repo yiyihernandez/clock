@@ -33,18 +33,18 @@ function updateClock() {
     }
 }
 
-// NUEVA FUNCIÓN: Controlar el silencio
+//silencio
 function toggleMute() {
     isMuted = !isMuted;
     const icon = document.getElementById("speakerIcon");
     
     if (isMuted) {
         musicaFondo.pause();
-        icon.className = "fas fa-volume-mute"; // Cambia el icono
+        icon.className = "fas fa-volume-mute";
     } else {
-        // Solo reproducir si ya se ha interactuado con la página
+       
         musicaFondo.play().catch(() => {});
-        icon.className = "fas fa-volume-up"; // Vuelve al icono normal
+        icon.className = "fas fa-volume-up"; 
     }
 }
 
@@ -79,8 +79,7 @@ function setClockTime() {
 
 function activarAlerta() {
     musicaFondo.pause();
-    // La alerta suena SIEMPRE aunque esté en mute (por seguridad), 
-    // pero puedes ponerle if(!isMuted) si prefieres silencio total.
+
     sonidoAlerta.play();
     
     document.getElementById("clockWrapper").classList.add("alarm-ringing");

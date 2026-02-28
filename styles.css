@@ -3,7 +3,6 @@
     --bg-dark: #000000;
 }
 
-/* ... (mantén el código anterior del body y clock-circle) ... */
 
 body {
     background-color: var(--bg-dark);
@@ -31,7 +30,6 @@ body {
     position: relative;
 }
 
-/* Estilo del Icono de Mute */
 .mute-icon {
     position: absolute;
     top: 60px;
@@ -48,7 +46,6 @@ body {
     transform: scale(1.2);
 }
 
-/* Resto de estilos anteriores */
 .time-display { text-align: center; margin-bottom: 10px; }
 #time { font-size: 85px; font-weight: bold; text-shadow: 0 0 20px var(--neon-color); line-height: 1; }
 #ampm { font-size: 25px; color: var(--neon-color); font-weight: bold; margin-top: 5px; }
