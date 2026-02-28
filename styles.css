@@ -1,0 +1,95 @@
+:root {
+  --main-color: #00f2ff; /* CAMBIA ESTO PARA PERSONALIZAR EL COLOR */
+  --bg-color: #0a0a0a;
+}
+
+body {
+  background-color: var(--bg-color);
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+}
+
+.main-container {
+  text-align: center;
+}
+
+/* El Círculo Central */
+.clock-circle {
+  width: 450px;
+  height: 450px;
+  border: 8px solid var(--main-color);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+  box-shadow: 0 0 20px var(--main-color), inset 0 0 20px var(--main-color);
+  transition: all 0.5s ease;
+}
+
+/* Animación de Alarma (El borde parpadea en rojo) */
+.alarm-active {
+  animation: pulse-red 0.8s infinite;
+  border-color: #ff0000 !important;
+  box-shadow: 0 0 40px #ff0000, inset 0 0 20px #ff0000 !important;
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+#time {
+  font-size: 70px;
+  color: white;
+  text-shadow: 0 0 10px var(--main-color);
+  margin-bottom: 0;
+}
+
+#ampm {
+  color: var(--main-color);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Controles y Botones */
+.controls {
+  margin-top: 30px;
+}
+
+#alarmTime {
+  background: transparent;
+  border: 1px solid var(--main-color);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.btn-neon {
+  background: transparent;
+  color: white;
+  border: 2px solid var(--main-color);
+  padding: 10px 15px;
+  margin: 5px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+/* Efecto Neón al pasar el cursor */
+.btn-neon:hover {
+  background: var(--main-color);
+  color: black;
+  box-shadow: 0 0 20px var(--main-color);
+  text-shadow: none;
+}
