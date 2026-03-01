@@ -10,7 +10,7 @@ Reloj interactivo con estética neon y sistema de alarmas personalizables.
 * **diseño:** El diseño cambia a amarillo neon al guardar nuevos sonidos.
 
 ## Tecnologias
-* HTML5, CSS3 (Efectos Glow) y JavaScript Vanilla.
+* HTML5, CSS3 (Efectos Glow) y JavaScript vanilla.
 
 ## Autora
 Desarrollado por **yiyihernandez** :D
