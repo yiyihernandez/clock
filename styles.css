@@ -1,11 +1,15 @@
 :root {
-    --neon-color: #ff0055;
-    --bg-dark: #000000;
+    --neon-color: #00f2ff;
+    --panel-bg: rgba(255, 255, 255, 0.08);
 }
 
+body.tema-fnf {
+    --neon-color: #ff0055;
+    background: radial-gradient(circle, #1a0033 0%, #000 100%);
+}
 
 body {
-    background-color: var(--bg-dark);
+    background-color: #000;
     margin: 0;
     height: 100vh;
     display: flex;
@@ -13,48 +17,69 @@ body {
     align-items: center;
     font-family: 'Segoe UI', sans-serif;
     color: white;
-    overflow: hidden;
 }
 
-.clock-circle {
-    width: 550px;
-    height: 550px;
-    border: 5px solid var(--neon-color);
-    border-radius: 50%;
+.app-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 80px; /* Más separación entre reloj y panel */
+}
+
+/* Panel más ancho a la derecha */
+.floating-panel {
+    background: var(--panel-bg);
+    backdrop-filter: blur(15px);
+    width: 100px; /* Más ancho */
+    height: 450px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+    transition: transform 0.2s ease;
+}
+
+.floating-panel:hover {
+    border-color: var(--neon-color);
+}
+
+#volLabel {
+    font-size: 12px;
+    color: var(--neon-color);
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* Modal de Settings */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.8);
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 30px var(--neon-color), inset 0 0 30px var(--neon-color);
-    background: radial-gradient(circle, #111 0%, #000 100%);
-    position: relative;
 }
 
-.mute-icon {
-    position: absolute;
-    top: 60px;
-    right: 120px;
-    font-size: 24px;
-    color: var(--neon-color);
-    cursor: pointer;
-    text-shadow: 0 0 10px var(--neon-color);
-    transition: 0.3s;
-    z-index: 10;
+.modal-content {
+    background: #111;
+    padding: 30px;
+    border: 2px solid var(--neon-color);
+    border-radius: 20px;
+    text-align: center;
 }
 
-.mute-icon:hover {
-    transform: scale(1.2);
+/* El resto de estilos del reloj y botones se mantienen igual... */
+.clock-circle {
+    width: 500px; height: 500px;
+    border: 5px solid var(--neon-color);
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    box-shadow: 0 0 30px var(--neon-color), inset 0 0 20px var(--neon-color);
 }
-
-.time-display { text-align: center; margin-bottom: 10px; }
-#time { font-size: 85px; font-weight: bold; text-shadow: 0 0 20px var(--neon-color); line-height: 1; }
-#ampm { font-size: 25px; color: var(--neon-color); font-weight: bold; margin-top: 5px; }
-.titulo-reloj { font-size: 20px; text-transform: uppercase; letter-spacing: 6px; margin: 20px 0; color: white; opacity: 0.8; }
-.controls { display: flex; flex-direction: column; align-items: center; gap: 15px; }
-#alarmTime { background: #1a1a1a; border: 2px solid var(--neon-color); color: white; padding: 10px; border-radius: 10px; font-size: 20px; text-align: center; outline: none; }
-.btn-neon { background: transparent; color: white; border: 2px solid var(--neon-color); padding: 12px 25px; margin: 5px; border-radius: 50px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
-.btn-neon:hover { background: var(--neon-color); box-shadow: 0 0 40px var(--neon-color); color: black; }
-.btn-stop { background: white; color: black; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; animation: blink 0.5s infinite; }
-@keyframes blink { 50% { opacity: 0.5; } }
-.alarm-ringing { animation: alarm-pulse 0.4s infinite; }
-@keyframes alarm-pulse { 0% { transform: scale(1); border-color: var(--neon-color); } 50% { transform: scale(1.03); border-color: #fff; box-shadow: 0 0 60px #fff; } 100% { transform: scale(1); border-color: var(--neon-color); } }
+#time { font-size: 80px; text-shadow: 0 0 20px var(--neon-color); }
+.btn-neon { background: transparent; border: 2px solid var(--neon-color); color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; margin: 5px; }

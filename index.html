@@ -3,38 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reloj Digital Neón</title>
+    <title>Reloj Digital Pro</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="tema-normal">
 
-    <div class="main-container">
-        <div class="clock-circle" id="clockWrapper">
-            
-            <div id="muteBtn" class="mute-icon" onclick="toggleMute()">
-                <i id="speakerIcon" class="fas fa-volume-up"></i>
-            </div>
-
-            <div class="time-display">
-                <div id="time">00:00:00</div>
-                <div id="ampm">AM</div>
-            </div>
-
-            <h1 class="titulo-reloj">Reloj Digital</h1>
-            
-            <div class="controls">
-                <input type="time" id="alarmTime">
-                
-                <div class="button-group">
-                    <button onclick="setAlarm()" class="btn-neon">Poner Alarma</button>
-                    <button onclick="setClockTime()" class="btn-neon">Ajustar Hora</button>
+    <div class="app-wrapper">
+        <main class="main-content">
+            <div class="clock-circle" id="clockWrapper">
+                <div class="time-display">
+                    <div id="time">00:00:00</div>
+                    <div id="ampm">AM</div>
                 </div>
-
-                <button id="stopBtn" onclick="stopAlarm()" class="btn-stop" style="display:none;">
-                    DETENER ALARMA
-                </button>
+                <h1 class="titulo-reloj" id="titulo">Reloj Digital</h1>
+                
+                <div class="controls">
+                    <input type="time" id="alarmTime">
+                    <div class="button-group">
+                        <button onclick="setAlarm()" class="btn-neon">Poner Alarma</button>
+                        <button onclick="setClockTime()" class="btn-neon">Ajustar Hora</button>
+                    </div>
+                    <button id="stopBtn" onclick="stopAlarm()" class="btn-stop" style="display:none;">DETENER</button>
+                </div>
             </div>
+        </main>
+
+        <aside class="floating-panel" id="volumePanel">
+            <div class="panel-header">
+                <i class="fas fa-sliders-h"></i>
+                <span id="volLabel">100%</span>
+            </div>
+            <nav class="menu-items">
+                <button onclick="cambiarTema('normal')" class="menu-btn active" id="btnNormal" title="Modo Normal">
+                    <i class="fas fa-ghost"></i>
+                </button>
+                <button onclick="cambiarTema('fnf')" class="menu-btn" id="btnFNF" title="Modo FNF">
+                    <i class="fas fa-microphone-alt"></i>
+                </button>
+                <button onclick="toggleMute()" class="menu-btn" id="muteBtn">
+                    <i id="speakerIcon" class="fas fa-volume-up"></i>
+                </button>
+            </nav>
+            <div class="panel-footer" onclick="toggleSettings()" style="cursor:pointer;">
+                <i class="fas fa-cog"></i>
+            </div>
+        </aside>
+    </div>
+
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h3>Personalizar Alarma</h3>
+            <p>Sube tu propio sonido de alerta:</p>
+            <input type="file" id="userAudioInput" accept="audio/*">
+            <button onclick="toggleSettings()" class="btn-neon">Cerrar</button>
         </div>
     </div>
 
