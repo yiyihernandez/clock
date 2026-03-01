@@ -7,12 +7,11 @@ let alarmaSonando = false;
 let globalVolume = 1.0; 
 let esPersonalizado = false;
 
-// Audios iniciales
+// iniciales
 const musicaFNAF = new Audio('alarmamusica.mp3'); 
 musicaFNAF.loop = true;
 let alertaFinal = new Audio('ding.mp3'); 
 
-// --- CAMBIO CLAVE: Variable para controlar el primer clic ---
 let audioDesbloqueado = false;
 
 function updateClock() {
@@ -60,11 +59,9 @@ function stopAlarm() {
 }
 
 function cambiarTema(tema) {
-    // --- SOLUCIÓN AL CLIC FALSO ---
-    // Si es la primera vez que hacen clic, desbloqueamos todos los audios aquí mismo
+
     if (!audioDesbloqueado) {
         musicaFNAF.play().then(() => {
-            // Si el tema no es fnaf, lo pausamos inmediatamente (solo era para desbloquear)
             if (tema !== 'fnaf') musicaFNAF.pause();
         }).catch(() => {});
         alertaFinal.load();
@@ -81,7 +78,7 @@ function cambiarTema(tema) {
     const btn = document.getElementById(tema === 'fnaf' ? 'btnFNAF' : 'btnNormal');
     if(btn) btn.classList.add('active');
 
-    // Audios según modo
+    // audio segun mod
     alertaFinal.pause(); 
 
     if (tema === 'normal') {
@@ -89,7 +86,6 @@ function cambiarTema(tema) {
         musicaFNAF.currentTime = 0;
         alertaFinal = new Audio('ding.mp3'); 
     } else if (tema === 'fnaf') {
-        // Si no está en mute y no hay alarma, reproducir música de fondo
         if (!isMuted && !alarmaSonando) {
             musicaFNAF.play().catch(() => {});
         }
