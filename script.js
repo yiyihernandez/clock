@@ -2,16 +2,15 @@ let timeOffset = 0;
 let activeAlarm = null;
 let isMuted = false;
 let currentTema = 'normal';
-let library = []; // biblioteca usuario
+let library = []; 
 
-// sonidos iniciales
-const musicaFNF = new Audio('alarmamusica.mp3');
+// iniciales
+const musicaFNF = new Audio('alarmamusica.mp3'); 
 musicaFNF.loop = true;
 
 const alertaNormal = new Audio('fantasma.mp3'); 
 let alertaFinal = new Audio('alarmaterminar.mp3'); 
 
-// sonido personalizado y cambiar color a amarillo
 function saveCustomSound() {
     const fileInput = document.getElementById('userAudioInput');
     const file = fileInput.files[0];
@@ -24,18 +23,16 @@ function saveCustomSound() {
             const newSound = { name, icon, url: e.target.result };
             library.push(newSound);
             updateSoundList();
-            fileInput.value = ''; // reset input file
-            document.getElementById('customName').value = ''; // lo mismo pero con name
-            alert(`Sonido "${name}" guardado en la biblioteca.`);
-
-            // activar amarillo
-            document.body.classList.add('upload-color-active');
+            fileInput.value = ''; 
+            document.getElementById('customName').value = ''; 
             
-
+            //amarillo al guardar
+            document.body.classList.add('upload-color-active');
+            alert(`Sonido "${name}" guardado.`);
         };
         reader.readAsDataURL(file);
     } else {
-        alert("Por favor selecciona un archivo primero.");
+        alert("Selecciona un archivo primero.");
     }
 }
 
@@ -53,100 +50,60 @@ function updateSoundList() {
 
 function selectAlarma(index) {
     const sound = library[index];
-    alertaFinal = new Audio(sound.url); // reemplaza la alarma
+    alertaFinal = new Audio(sound.url); 
     document.getElementById('activeAlarmName').innerText = sound.name;
     document.getElementById('activeAlarmIcon').className = `fas ${sound.icon}`;
     document.getElementById('currentAlarmInfo').style.display = 'block';
-    alert(`Alarma establecida con: ${sound.name}`);
+    
+    // cambio color al del sonido
+    document.body.classList.add('upload-color-active');
 }
 
-// volumen y mute
-document.getElementById('volumePanel').addEventListener('wheel', (e) => {
-    e.preventDefault();
-    let change = e.deltaY > 0 ? -0.05 : 0.05;
-    setVolume(Math.min(1, Math.max(0, musicaFNF.volume + change)));
-});
-
-function manualVolume() {
-    let input = prompt("Volumen (0-100):", musicaFNF.volume * 100);
-    if (input !== null) {
-        let val = parseInt(input);
-        if (!isNaN(val) && val >= 0 && val <= 100) {
-            setVolume(val / 100);
-        }
-    }
-}
-
-function setVolume(v) {
-    musicaFNF.volume = v; alertaFinal.volume = v; alertaNormal.volume = v;
-    document.getElementById('volLabel').innerText = Math.round(v * 100) + "%";
-}
-
-function toggleMute() {
-    isMuted = !isMuted;
-    const icon = document.getElementById("speakerIcon");
-    if (isMuted) {
-        musicaFNF.pause();
-        icon.className = "fas fa-volume-mute";
-    } else {
-        if (currentTema === 'fnf') musicaFNF.play().catch(() => {});
-        icon.className = "fas fa-volume-up";
-    }
-}
-
-// Temas
 function cambiarTema(tema) {
     currentTema = tema;
     document.body.className = 'tema-' + tema;
     
     if (currentTema === 'fnf') {
         document.body.classList.remove('upload-color-active'); 
-    } else {
+    }
 
+    if (tema === 'normal') {
+        alertaNormal.play().catch(() => console.log("Clickea en la página para activar audio"));
+        musicaFNF.pause();
     }
 
     document.querySelectorAll('.bubble').forEach(b => b.classList.remove('active'));
-    document.getElementById(tema === 'fnf' ? 'btnFNF' : 'btnNormal').classList.add('active');
-    document.getElementById('titulo').innerText = tema === 'fnf' ? "Friday Night Funkin'" : "Reloj Digital";
+    const btn = document.getElementById(tema === 'fnf' ? 'btnFNF' : 'btnNormal');
+    if(btn) btn.classList.add('active');
 
-    musicaFNF.pause();
     if (tema === 'fnf' && !isMuted) musicaFNF.play().catch(() => {});
 }
 
-// Configuracion hr alarm
 function updateClock() {
     let now = new Date();
     now.setMilliseconds(now.getMilliseconds() + timeOffset);
-
-    let h = now.getHours();
-    let m = now.getMinutes();
-    let s = now.getSeconds();
-
-    // formato 24h
+    let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+    
+    // formato24h
     let currentTime24 = h.toString().padStart(2, '0') + ":" + m.toString().padStart(2, '0');
     
-    // formato vs 12h
+    // formato 12h
     let ampm = h >= 12 ? 'PM' : 'AM';
-    h = h % 12 || 12;
+    let h12 = h % 12 || 12;
     
-    // formateo num
-    h = h < 10 ? '0' + h : h;
-    m = m < 10 ? '0' + m : m;
-    s = s < 10 ? '0' + s : s;
-
-    document.getElementById("time").innerText = `${h}:${m}:${s}`;
+    document.getElementById("time").innerText = 
+        `${h12.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
     document.getElementById("ampm").innerText = ampm;
 
-    // alarma suena si/no
-    if (activeAlarm === currentTime24) {
+    // disparador de la alarma
+    if (activeAlarm === currentTime24 && s === 0) { 
         activarAlerta();
     }
 }
 
 function activarAlerta() {
     musicaFNF.pause();
-    // suena alarma personalizada o por defecto
-    alertaFinal.play().catch(() => {});
+    alertaFinal.play().catch(e => console.error("Error al sonar:", e));
     document.getElementById("clockWrapper").classList.add("alarm-ringing");
     document.getElementById("stopBtn").style.display = "block";
 }
@@ -157,7 +114,6 @@ function stopAlarm() {
     alertaFinal.currentTime = 0;
     document.getElementById("clockWrapper").classList.remove("alarm-ringing");
     document.getElementById("stopBtn").style.display = "none";
-    
     if (currentTema === 'fnf' && !isMuted) musicaFNF.play().catch(() => {});
 }
 
@@ -165,21 +121,7 @@ function setAlarm() {
     const input = document.getElementById("alarmTime").value;
     if (input) {
         activeAlarm = input;
-        alert("Alarma programada");
-    } else {
-        alert("Por favor selecciona una hora.");
-    }
-}
-
-function setClockTime() {
-    const input = document.getElementById("alarmTime").value;
-    if (input) {
-        let [h, m] = input.split(':');
-        let target = new Date();
-        target.setHours(h, m, 0);
-        // hr deseada y normal
-        timeOffset = target - new Date();
-        alert("Hora del reloj ajustada");
+        alert("Alarma programada para las " + input);
     }
 }
 
@@ -188,6 +130,5 @@ function toggleSettings() {
     modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
 }
 
-// inicio
-setInterval(updateClock, 1000); // cada segundo
+setInterval(updateClock, 1000);
 updateClock();

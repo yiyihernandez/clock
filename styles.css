@@ -77,7 +77,7 @@ body {
 
 /* reloj central */
 .clock-circle {
-    width: 500px;
+    width: 550px;
     height: 550px; 
     border-radius: 50%;
     border: 5px solid var(--neon-color);
