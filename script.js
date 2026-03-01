@@ -7,17 +7,13 @@ let alarmaSonando = false;
 let globalVolume = 1.0; 
 let esPersonalizado = false;
 
-// Audio inicial - Nombre actualizado a FNAF
+// Audios iniciales
 const musicaFNAF = new Audio('alarmamusica.mp3'); 
 musicaFNAF.loop = true;
-
-// Sonido base inicial
 let alertaFinal = new Audio('ding.mp3'); 
 
-document.addEventListener('click', () => {
-    musicaFNAF.load();
-    alertaFinal.load();
-}, { once: true });
+// --- CAMBIO CLAVE: Variable para controlar el primer clic ---
+let audioDesbloqueado = false;
 
 function updateClock() {
     let now = new Date();
@@ -39,7 +35,7 @@ function updateClock() {
 
 function activarAlerta() {
     alarmaSonando = true;
-    musicaFNAF.pause(); 
+    musicaFNAF.pause();
     
     alertaFinal.loop = true; 
     alertaFinal.volume = globalVolume;
@@ -60,11 +56,21 @@ function stopAlarm() {
     document.getElementById("clockWrapper").classList.remove("alarm-ringing");
     document.getElementById("stopBtn").style.display = "none";
     
-    // Si el tema actual es FNAF, reanudar música
     if (currentTema === 'fnaf' && !isMuted) musicaFNAF.play();
 }
 
 function cambiarTema(tema) {
+    // --- SOLUCIÓN AL CLIC FALSO ---
+    // Si es la primera vez que hacen clic, desbloqueamos todos los audios aquí mismo
+    if (!audioDesbloqueado) {
+        musicaFNAF.play().then(() => {
+            // Si el tema no es fnaf, lo pausamos inmediatamente (solo era para desbloquear)
+            if (tema !== 'fnaf') musicaFNAF.pause();
+        }).catch(() => {});
+        alertaFinal.load();
+        audioDesbloqueado = true;
+    }
+
     esPersonalizado = false; 
     currentTema = tema;
     
@@ -72,25 +78,29 @@ function cambiarTema(tema) {
     document.body.classList.remove('upload-color-active'); 
 
     document.querySelectorAll('.bubble').forEach(b => b.classList.remove('active'));
-    // IMPORTANTE: Asegúrate que en tu HTML el ID del botón sea "btnFNAF"
     const btn = document.getElementById(tema === 'fnaf' ? 'btnFNAF' : 'btnNormal');
     if(btn) btn.classList.add('active');
 
-    alertaFinal.pause();
+    // Audios según modo
+    alertaFinal.pause(); 
+
     if (tema === 'normal') {
         musicaFNAF.pause();
         musicaFNAF.currentTime = 0;
-        alertaFinal = new Audio('ding.mp3');
+        alertaFinal = new Audio('ding.mp3'); 
     } else if (tema === 'fnaf') {
-        if (!isMuted && !alarmaSonando) musicaFNAF.play().catch(() => {});
-        alertaFinal = new Audio('alarmaterminar.mp3');
+        // Si no está en mute y no hay alarma, reproducir música de fondo
+        if (!isMuted && !alarmaSonando) {
+            musicaFNAF.play().catch(() => {});
+        }
+        alertaFinal = new Audio('alarmaterminar.mp3'); 
     }
     
     alertaFinal.volume = globalVolume;
     alertaFinal.muted = isMuted;
 }
 
-// Mute y Volumen actualizados
+// Controles de audio
 function setVolume(v) {
     globalVolume = v;
     musicaFNAF.volume = v;
@@ -124,7 +134,7 @@ function manualVolume() {
     }
 }
 
-// Mod Amarillo (Biblioteca)
+// Biblioteca amarillo
 function saveCustomSound() {
     const fileInput = document.getElementById('userAudioInput');
     if (fileInput && fileInput.files[0]) {
@@ -156,7 +166,6 @@ function updateSoundList() {
         div.onclick = () => {
             alertaFinal.pause();
             alertaFinal = new Audio(sound.url);
-            
             alertaFinal.volume = globalVolume;
             alertaFinal.muted = isMuted;
             alertaFinal.loop = true;
@@ -164,10 +173,9 @@ function updateSoundList() {
             esPersonalizado = true;
             document.body.classList.remove('tema-normal', 'tema-fnaf');
             document.body.classList.add('upload-color-active');
-            
             document.querySelectorAll('.bubble').forEach(b => b.classList.remove('active'));
             
-            alert("Alarma personalizada: " + sound.name);
+            alert("Alarma de la biblioteca activada: " + sound.name);
         };
         list.appendChild(div);
     });
