@@ -47,7 +47,7 @@ body {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.08);
+    background: #ffffff14;
     border: 2px solid var(--neon-color);
     color: white;
     display: flex;
@@ -56,7 +56,7 @@ body {
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     font-size: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 10px #00000080;
     outline: none;
 }
 
@@ -249,8 +249,8 @@ body {
 
 #customName {
     flex-grow: 1;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: #ffffff0d;
+    border: 1px solid #ffffff1a;
     color: white;
     padding: 12px;
     border-radius: 10px;
@@ -259,8 +259,8 @@ body {
 }
 
 #iconSelect {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: #ffffff0d;
+    border: 1px solid #ffffff1a;
     color: white;
     padding: 12px;
     border-radius: 10px;
@@ -271,9 +271,9 @@ body {
 
 /* inputfile personalizado */
 .custom-file-upload {
-    background: rgba(255,255,255,0.03);
-    border: 1px dashed rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.6);
+    background: #ffffff08;
+    border: 1px dashed #ffffff33;
+    color: #ffffff99;
     padding: 15px;
     border-radius: 10px;
     cursor: pointer;
@@ -283,8 +283,8 @@ body {
 }
 
 .custom-file-upload:hover {
-    background: rgba(255,255,255,0.08);
-    border-color: rgba(255,255,255,0.4);
+    background: #ffffff14;
+    border-color: #ffffff66;
     color: white;
 }
 

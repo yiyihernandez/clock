@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reloj Neón Gamer Pro</title>
+    <title>Clock neon</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -11,12 +11,12 @@
 
     <div class="app-wrapper">
         <aside class="bubble-panel" id="volumePanel">
-            <div class="bubble vol-bubble" onclick="manualVolume()" title="Click para ajustar volumen">
+            <div class="bubble vol-bubble" onclick="manualVolume()" title="click para ajustar volumen">
                 <span id="volLabel">100%</span>
             </div>
             
             <div class="menu-bubbles">
-                <button onclick="cambiarTema('normal')" class="bubble active" id="btnNormal" title="Modo Normal">
+                <button onclick="cambiarTema('normal')" class="bubble active" id="btnNormal" title="mod normal">
                     <i class="fas fa-ghost"></i>
                 </button>
                 <button onclick="cambiarTema('fnf')" class="bubble" id="btnFNF" title="Modo FNF">
@@ -38,7 +38,7 @@
                     <div id="time">00:00:00</div>
                     <div id="ampm">AM</div>
                 </div>
-                <h1 class="titulo-reloj" id="titulo">Reloj Digital</h1>
+                <h1 class="titulo-reloj" id="titulo">Reloj digital</h1>
                 
                 <div id="currentAlarmInfo" class="alarm-badge" style="display:none;">
                     <i id="activeAlarmIcon" class="fas fa-bell"></i> <span id="activeAlarmName">Alarma</span>
@@ -47,8 +47,8 @@
                 <div class="controls">
                     <input type="time" id="alarmTime">
                     <div class="button-group">
-                        <button onclick="setAlarm()" class="btn-neon">Poner Alarma</button>
-                        <button onclick="setClockTime()" class="btn-neon">Ajustar Hora</button>
+                        <button onclick="setAlarm()" class="btn-neon">Poner alarma</button>
+                        <button onclick="setClockTime()" class="btn-neon">Ajustar hora</button>
                     </div>
                     <button id="stopBtn" onclick="stopAlarm()" class="btn-stop" style="display:none;">DETENER</button>
                 </div>
@@ -59,13 +59,13 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content gamer-card">
             <div class="modal-header">
-                <h2>Biblioteca de Sonidos</h2>
+                <h2>Biblioteca de sonidos</h2>
                 <span class="close-x" onclick="toggleSettings()">&times;</span>
             </div>
             
             <div class="upload-section gamer-form">
                 <div class="input-group">
-                    <input type="text" id="customName" placeholder="Nombre del sonido...">
+                    <input type="text" id="customName" placeholder="nombre del sonido...">
                     <select id="iconSelect">
                         <option value="fa-bell">😺</option>
                         <option value="fa-bolt">🐾</option>
@@ -78,7 +78,7 @@
                     <input type="file" id="userAudioInput" accept="audio/*">
                     <i class="fas fa-upload"></i> Seleccionar archivo
                 </label>
-                <button onclick="saveCustomSound()" class="btn-save-neon">Guardar Sonido</button>
+                <button onclick="saveCustomSound()" class="btn-save-neon">Guardar sonido</button>
             </div>
             
             <div id="soundList" class="sound-grid-pro">
