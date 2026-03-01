@@ -1,14 +1,41 @@
 :root {
     --neon-color: #00f2ff;
     --panel-bg: rgba(255, 255, 255, 0.05);
+    --modal-bg: rgba(10, 10, 10, 0.95);
+    --font-main: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
 }
 
-body.tema-fnf { --neon-color: #ff0055; background: #0a001a; }
-body { background: #000; margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Segoe UI', sans-serif; color: white; overflow: hidden; }
 
-.app-wrapper { display: flex; align-items: center; gap: 60px; }
+.upload-color-active {
+    --neon-color: #ffff00 !important;
+}
 
-/* Panel de Burbujas */
+/* estilo fnf */
+body.tema-fnf { 
+    --neon-color: #ff0055;
+    background: radial-gradient(circle, #1a0033 0%, #000 100%); 
+}
+
+
+body { 
+    background: #000; 
+    margin: 0; 
+    height: 100vh; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    font-family: var(--font-main); 
+    color: white; 
+    overflow: hidden; 
+}
+
+.app-wrapper { 
+    display: flex; 
+    align-items: center; 
+    gap: 60px; 
+}
+
+/* burbujas neon */
 .bubble-panel {
     display: flex;
     flex-direction: column;
@@ -20,7 +47,7 @@ body { background: #000; margin: 0; height: 100vh; display: flex; justify-conten
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.08);
     border: 2px solid var(--neon-color);
     color: white;
     display: flex;
@@ -30,9 +57,9 @@ body { background: #000; margin: 0; height: 100vh; display: flex; justify-conten
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     font-size: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    outline: none;
 }
 
-/* Efecto al pasar el cursor (Hover) */
 .bubble:hover {
     transform: scale(1.3);
     background: var(--neon-color);
@@ -48,13 +75,47 @@ body { background: #000; margin: 0; height: 100vh; display: flex; justify-conten
 
 #volLabel { font-size: 12px; font-weight: bold; }
 
-/* Reloj y Badge */
+/* reloj central */
 .clock-circle {
-    width: 520px; height: 520px; border-radius: 50%;
+    width: 500px;
+    height: 550px; 
+    border-radius: 50%;
     border: 5px solid var(--neon-color);
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
     box-shadow: 0 0 40px var(--neon-color), inset 0 0 20px var(--neon-color);
     position: relative;
+}
+
+.time-display {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+/* tamaño de hr */
+#time { 
+    font-size: 100px;
+    font-weight: bold; 
+    text-shadow: 0 0 25px var(--neon-color); 
+    line-height: 1;
+}
+
+#ampm { 
+    font-size: 25px; 
+    color: var(--neon-color);
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.titulo-reloj { 
+    font-size: 22px; 
+    text-transform: uppercase; 
+    letter-spacing: 6px; 
+    margin: 20px 0; 
+    color: white; 
+    opacity: 0.9;
 }
 
 .alarm-badge {
@@ -63,24 +124,245 @@ body { background: #000; margin: 0; height: 100vh; display: flex; justify-conten
     padding: 5px 15px;
     border-radius: 20px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     font-size: 14px;
 }
 
-/* Modal Estilizado */
-.modal-content {
-    background: #111; padding: 30px; border: 2px solid var(--neon-color);
-    border-radius: 30px; text-align: center; width: 400px;
+/* Controles */
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
-.sound-grid {
-    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; justify-content: center;
-    max-height: 200px; overflow-y: auto; padding: 10px;
+#alarmTime {
+    background: #111;
+    border: 2px solid var(--neon-color);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    text-align: center;
+    outline: none;
 }
 
-.sound-item {
-    background: #222; padding: 10px; border-radius: 10px; border: 1px solid var(--neon-color);
-    cursor: pointer; transition: 0.3s; font-size: 12px;
+.btn-neon {
+    background: transparent;
+    border: 2px solid var(--neon-color);
+    color: white;
+    padding: 12px 25px;
+    margin: 5px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
 }
 
-.sound-item:hover { background: var(--neon-color); color: black; }
+.btn-neon:hover {
+    background: var(--neon-color);
+    box-shadow: 0 0 40px var(--neon-color);
+    color: black;
+}
+
+.btn-stop {
+    background: white;
+    color: black;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    animation: blink 0.5s infinite;
+}
+
+
+.modal { 
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.85); 
+    backdrop-filter: blur(5px);
+    justify-content: center; 
+    align-items: center; 
+}
+
+/* card modal */
+.modal-content.gamer-card {
+    background: var(--modal-bg);
+    padding: 30px; 
+    border: 2px solid var(--neon-color);
+    border-radius: 30px; 
+    text-align: center; 
+    width: 450px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 15px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--neon-color);
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.close-x {
+    color: rgba(255,255,255,0.5);
+    font-size: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close-x:hover {
+    color: white;
+}
+
+/* formulario personalizado */
+.upload-section.gamer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+
+#customName {
+    flex-grow: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+#iconSelect {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+}
+
+/* inputfile personalizado */
+.custom-file-upload {
+    background: rgba(255,255,255,0.03);
+    border: 1px dashed rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.6);
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: left;
+    font-size: 14px;
+}
+
+.custom-file-upload:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.4);
+    color: white;
+}
+
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+/* boton guardar */
+.btn-save-neon {
+    background: var(--neon-color);
+    color: black;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s;
+    letter-spacing: 1px;
+}
+
+.btn-save-neon:hover {
+    box-shadow: 0 0 25px var(--neon-color);
+    transform: translateY(-2px);
+}
+
+/* lista sonidos */
+.sound-grid-pro {
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
+    margin-top: 10px; 
+    max-height: 200px; 
+    overflow-y: auto; 
+    padding: 10px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 15px;
+}
+
+.sound-item-pro {
+    background: rgba(255,255,255,0.03);
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sound-item-pro:hover {
+    background: var(--neon-color);
+    color: black;
+    transform: translateX(5px);
+}
+
+.sound-item-pro i {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+.sound-item-pro:hover i {
+    opacity: 1;
+}
+
+.btn-neon.close-btn {
+    margin-top: 20px;
+    font-size: 14px;
+    padding: 10px 20px;
+}
+
+/* animaciones */
+@keyframes blink { 50% { opacity: 0.5; } }
+@keyframes alarm-pulse {
+    0% { transform: scale(1); border-color: var(--neon-color); }
+    50% { transform: scale(1.03); border-color: #fff; box-shadow: 0 0 60px #fff; }
+    100% { transform: scale(1); border-color: var(--neon-color); }
+}
+.alarm-ringing { animation: alarm-pulse 0.4s infinite; }
