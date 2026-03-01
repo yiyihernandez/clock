@@ -11,7 +11,7 @@
 }
 
 /* estilo fnf */
-body.tema-fnf { 
+body.tema-fnaf { 
     --neon-color: #ff0055;
     background: radial-gradient(circle, #1a0033 0%, #000 100%); 
 }
@@ -39,13 +39,15 @@ body {
 .bubble-panel {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 50px;
     align-items: center;
+    height: auto; 
+    padding: 40px 0;
 }
 
 .bubble {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     background: #ffffff14;
     border: 2px solid var(--neon-color);
@@ -234,7 +236,7 @@ body {
     color: white;
 }
 
-/* formulario personalizado */
+/* personalizado */
 .upload-section.gamer-form {
     display: flex;
     flex-direction: column;

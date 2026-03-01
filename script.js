@@ -5,14 +5,17 @@ let currentTema = 'normal';
 let library = []; 
 let alarmaSonando = false; 
 let globalVolume = 1.0; 
-let esPersonalizado = false; // Nueva variable para bloquear el color amarillo
+let esPersonalizado = false;
 
-const musicaFNF = new Audio('alarmamusica.mp3'); 
-musicaFNF.loop = true;
-let alertaFinal = new Audio('ding.mp3'); //
+// Audio inicial - Nombre actualizado a FNAF
+const musicaFNAF = new Audio('alarmamusica.mp3'); 
+musicaFNAF.loop = true;
+
+// Sonido base inicial
+let alertaFinal = new Audio('ding.mp3'); 
 
 document.addEventListener('click', () => {
-    musicaFNF.load();
+    musicaFNAF.load();
     alertaFinal.load();
 }, { once: true });
 
@@ -36,11 +39,14 @@ function updateClock() {
 
 function activarAlerta() {
     alarmaSonando = true;
-    musicaFNF.pause(); 
+    musicaFNAF.pause(); 
+    
     alertaFinal.loop = true; 
     alertaFinal.volume = globalVolume;
+    alertaFinal.muted = isMuted; 
     alertaFinal.currentTime = 0;
-    alertaFinal.play().catch(e => console.log("Clic para sonido"));
+    alertaFinal.play().catch(e => console.log("Interacción requerida"));
+    
     document.getElementById("clockWrapper").classList.add("alarm-ringing");
     document.getElementById("stopBtn").style.display = "block";
 }
@@ -50,14 +56,15 @@ function stopAlarm() {
     activeAlarm = null;
     alertaFinal.pause();
     alertaFinal.loop = false;
-    alertaFinal.currentTime = 0;
+    
     document.getElementById("clockWrapper").classList.remove("alarm-ringing");
     document.getElementById("stopBtn").style.display = "none";
-    if (currentTema === 'fnf' && !isMuted) musicaFNF.play();
+    
+    // Si el tema actual es FNAF, reanudar música
+    if (currentTema === 'fnaf' && !isMuted) musicaFNAF.play();
 }
 
 function cambiarTema(tema) {
-    // Si el usuario cambia de tema manualmente, desactivamos el modo personalizado
     esPersonalizado = false; 
     currentTema = tema;
     
@@ -65,23 +72,59 @@ function cambiarTema(tema) {
     document.body.classList.remove('upload-color-active'); 
 
     document.querySelectorAll('.bubble').forEach(b => b.classList.remove('active'));
-    const btn = document.getElementById(tema === 'fnf' ? 'btnFNF' : 'btnNormal');
+    // IMPORTANTE: Asegúrate que en tu HTML el ID del botón sea "btnFNAF"
+    const btn = document.getElementById(tema === 'fnaf' ? 'btnFNAF' : 'btnNormal');
     if(btn) btn.classList.add('active');
 
+    alertaFinal.pause();
     if (tema === 'normal') {
-        musicaFNF.pause();
-        musicaFNF.currentTime = 0;
-        alertaFinal.pause();
-        alertaFinal = new Audio('ding.mp3'); //
-        alertaFinal.volume = globalVolume;
-    } else if (tema === 'fnf') {
-        if (!isMuted && !alarmaSonando) musicaFNF.play().catch(() => {});
-        alertaFinal.pause();
-        alertaFinal = new Audio('alarmaterminar.mp3'); 
-        alertaFinal.volume = globalVolume;
+        musicaFNAF.pause();
+        musicaFNAF.currentTime = 0;
+        alertaFinal = new Audio('ding.mp3');
+    } else if (tema === 'fnaf') {
+        if (!isMuted && !alarmaSonando) musicaFNAF.play().catch(() => {});
+        alertaFinal = new Audio('alarmaterminar.mp3');
+    }
+    
+    alertaFinal.volume = globalVolume;
+    alertaFinal.muted = isMuted;
+}
+
+// Mute y Volumen actualizados
+function setVolume(v) {
+    globalVolume = v;
+    musicaFNAF.volume = v;
+    if (alertaFinal) alertaFinal.volume = v;
+    
+    const label = document.getElementById('volLabel');
+    if (label) label.innerText = Math.round(v * 100) + "%";
+}
+
+function toggleMute() {
+    isMuted = !isMuted;
+    const icon = document.getElementById("speakerIcon");
+    
+    musicaFNAF.muted = isMuted;
+    if (alertaFinal) alertaFinal.muted = isMuted;
+
+    if (isMuted) {
+        musicaFNAF.pause();
+        if (icon) icon.className = "fas fa-volume-mute";
+    } else {
+        if (currentTema === 'fnaf' && !alarmaSonando) musicaFNAF.play();
+        if (icon) icon.className = "fas fa-volume-up";
     }
 }
 
+function manualVolume() {
+    let input = prompt("Volumen (0-100):", globalVolume * 100);
+    if (input !== null) {
+        let val = parseInt(input);
+        if (!isNaN(val) && val >= 0 && val <= 100) setVolume(val / 100);
+    }
+}
+
+// Mod Amarillo (Biblioteca)
 function saveCustomSound() {
     const fileInput = document.getElementById('userAudioInput');
     if (fileInput && fileInput.files[0]) {
@@ -95,9 +138,8 @@ function saveCustomSound() {
             library.push(newSound);
             updateSoundList();
             
-            // Forzamos el estado amarillo al subir
             esPersonalizado = true;
-            document.body.classList.add('upload-color-active'); //
+            document.body.classList.add('upload-color-active');
         };
         reader.readAsDataURL(fileInput.files[0]);
     }
@@ -114,34 +156,29 @@ function updateSoundList() {
         div.onclick = () => {
             alertaFinal.pause();
             alertaFinal = new Audio(sound.url);
+            
             alertaFinal.volume = globalVolume;
+            alertaFinal.muted = isMuted;
             alertaFinal.loop = true;
             
-            // PERSISTENCIA AMARILLA: Al seleccionar un sonido, bloqueamos el color
             esPersonalizado = true;
-            document.body.classList.add('upload-color-active'); //
+            document.body.classList.remove('tema-normal', 'tema-fnaf');
+            document.body.classList.add('upload-color-active');
             
-            // Quitamos el estado 'active' de los otros iconos para que sepa que está en modo "Custom"
             document.querySelectorAll('.bubble').forEach(b => b.classList.remove('active'));
             
-            alert("Sonido personalizado activado: " + sound.name);
+            alert("Alarma personalizada: " + sound.name);
         };
         list.appendChild(div);
     });
 }
 
-// Controles de volumen y ajustes permanecen igual...
-function setVolume(v) {
-    globalVolume = v;
-    musicaFNF.volume = v;
-    alertaFinal.volume = v;
-    const label = document.getElementById('volLabel');
-    if (label) label.innerText = Math.round(v * 100) + "%";
-}
-
 function setAlarm() {
     const input = document.getElementById("alarmTime").value;
-    if (input) { activeAlarm = input; alert("Alarma programada"); }
+    if (input) { 
+        activeAlarm = input; 
+        alert("Alarma programada"); 
+    }
 }
 
 function toggleSettings() {

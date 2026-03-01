@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clock neon</title>
+    <title>Neon Digital Clock - yiyihernandez</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -11,23 +11,26 @@
 
     <div class="app-wrapper">
         <aside class="bubble-panel" id="volumePanel">
-            <div class="bubble vol-bubble" onclick="manualVolume()" title="click para ajustar volumen">
+            
+            <div class="bubble vol-bubble" onclick="manualVolume()" title="Click para ajustar volumen">
                 <span id="volLabel">100%</span>
             </div>
             
             <div class="menu-bubbles">
-                <button onclick="cambiarTema('normal')" class="bubble active" id="btnNormal" title="mod normal">
+                <button onclick="cambiarTema('normal')" class="bubble active" id="btnNormal" title="Mod fantasma">
                     <i class="fas fa-ghost"></i>
                 </button>
-                <button onclick="cambiarTema('fnf')" class="bubble" id="btnFNF" title="Modo FNF">
+                
+                <button onclick="cambiarTema('fnaf')" class="bubble" id="btnFNAF" title="Mod FNAF">
                     <i class="fas fa-microphone-alt"></i>
                 </button>
-                <button onclick="toggleMute()" class="bubble" id="muteBtn">
+                
+                <button onclick="toggleMute()" class="bubble" id="muteBtn" title="Silenciar">
                     <i id="speakerIcon" class="fas fa-volume-up"></i>
                 </button>
             </div>
 
-            <button class="bubble settings-bubble" onclick="toggleSettings()" title="Configurar Sonidos">
+            <button class="bubble settings-bubble" onclick="toggleSettings()" title="Configurar sonidos personalizados">
                 <i class="fas fa-music"></i>
             </button>
         </aside>
@@ -38,10 +41,12 @@
                     <div id="time">00:00:00</div>
                     <div id="ampm">AM</div>
                 </div>
+                
                 <h1 class="titulo-reloj" id="titulo">Reloj digital</h1>
                 
                 <div id="currentAlarmInfo" class="alarm-badge" style="display:none;">
-                    <i id="activeAlarmIcon" class="fas fa-bell"></i> <span id="activeAlarmName">Alarma</span>
+                    <i id="activeAlarmIcon" class="fas fa-bell"></i> 
+                    <span id="activeAlarmName">Alarma</span>
                 </div>
 
                 <div class="controls">
@@ -65,19 +70,21 @@
             
             <div class="upload-section gamer-form">
                 <div class="input-group">
-                    <input type="text" id="customName" placeholder="nombre del sonido...">
+                    <input type="text" id="customName" placeholder="Nombre del sonido...">
                     <select id="iconSelect">
-                        <option value="fa-bell">😺</option>
-                        <option value="fa-bolt">🐾</option>
-                        <option value="fa-fire">🕸️</option>
-                        <option value="fa-heart">❤️</option>
-                        <option value="fa-star">⭐</option>
+                        <option value="fa-bell">😺 </option>
+                        <option value="fa-bolt">🐾 </option>
+                        <option value="fa-fire">🕸️ </option>
+                        <option value="fa-heart">❤️ </option>
+                        <option value="fa-star">⭐ </option>
                     </select>
                 </div>
+                
                 <label class="custom-file-upload">
                     <input type="file" id="userAudioInput" accept="audio/*">
                     <i class="fas fa-upload"></i> Seleccionar archivo
                 </label>
+                
                 <button onclick="saveCustomSound()" class="btn-save-neon">Guardar sonido</button>
             </div>
             
