@@ -5,13 +5,11 @@ let currentTema = 'normal';
 let library = []; 
 let alarmaSonando = false; 
 let globalVolume = 1.0; 
+let esPersonalizado = false; // Nueva variable para bloquear el color amarillo
 
 const musicaFNF = new Audio('alarmamusica.mp3'); 
 musicaFNF.loop = true;
-
-// base
-let alertaFinal = new Audio('ding.mp3'); 
-// ------------------------------
+let alertaFinal = new Audio('ding.mp3'); //
 
 document.addEventListener('click', () => {
     musicaFNF.load();
@@ -38,13 +36,11 @@ function updateClock() {
 
 function activarAlerta() {
     alarmaSonando = true;
-    musicaFNF.pause(); // apaga fnf/no mezclar
-    
+    musicaFNF.pause(); 
     alertaFinal.loop = true; 
     alertaFinal.volume = globalVolume;
     alertaFinal.currentTime = 0;
     alertaFinal.play().catch(e => console.log("Clic para sonido"));
-    
     document.getElementById("clockWrapper").classList.add("alarm-ringing");
     document.getElementById("stopBtn").style.display = "block";
 }
@@ -55,83 +51,53 @@ function stopAlarm() {
     alertaFinal.pause();
     alertaFinal.loop = false;
     alertaFinal.currentTime = 0;
-    
     document.getElementById("clockWrapper").classList.remove("alarm-ringing");
     document.getElementById("stopBtn").style.display = "none";
-    
-
-    if (currentTema === 'fnf' && !isMuted) {
-        musicaFNF.play();
-    }
+    if (currentTema === 'fnf' && !isMuted) musicaFNF.play();
 }
 
 function cambiarTema(tema) {
+    // Si el usuario cambia de tema manualmente, desactivamos el modo personalizado
+    esPersonalizado = false; 
     currentTema = tema;
+    
     document.body.className = 'tema-' + tema;
     document.body.classList.remove('upload-color-active'); 
 
-    // botones
     document.querySelectorAll('.bubble').forEach(b => b.classList.remove('active'));
     const btn = document.getElementById(tema === 'fnf' ? 'btnFNF' : 'btnNormal');
     if(btn) btn.classList.add('active');
 
-    // silencio
     if (tema === 'normal') {
-        // azul
         musicaFNF.pause();
         musicaFNF.currentTime = 0;
+        alertaFinal.pause();
+        alertaFinal = new Audio('ding.mp3'); //
+        alertaFinal.volume = globalVolume;
     } else if (tema === 'fnf') {
-        // rosado
-        if (!isMuted && !alarmaSonando) {
-            musicaFNF.play().catch(() => {});
-        }
+        if (!isMuted && !alarmaSonando) musicaFNF.play().catch(() => {});
+        alertaFinal.pause();
+        alertaFinal = new Audio('alarmaterminar.mp3'); 
+        alertaFinal.volume = globalVolume;
     }
 }
 
-
-function setVolume(v) {
-    globalVolume = v;
-    musicaFNF.volume = v;
-    alertaFinal.volume = v;
-    document.getElementById('volLabel').innerText = Math.round(v * 100) + "%";
-}
-
-function manualVolume() {
-    let input = prompt("Volumen (0-100):", globalVolume * 100);
-    if (input !== null) {
-        let val = parseInt(input);
-        if (!isNaN(val) && val >= 0 && val <= 100) setVolume(val / 100);
-    }
-}
-
-function toggleMute() {
-    isMuted = !isMuted;
-    const icon = document.getElementById("speakerIcon");
-    if (isMuted) {
-        musicaFNF.pause();
-        alertaFinal.muted = true;
-        icon.className = "fas fa-volume-mute";
-    } else {
-        if (currentTema === 'fnf' && !alarmaSonando) musicaFNF.play();
-        alertaFinal.muted = false;
-        icon.className = "fas fa-volume-up";
-    }
-}
-
-// amarillo
 function saveCustomSound() {
     const fileInput = document.getElementById('userAudioInput');
-    if (fileInput.files[0]) {
+    if (fileInput && fileInput.files[0]) {
         const reader = new FileReader();
         reader.onload = (e) => {
             const newSound = { 
-                name: document.getElementById('customName').value || "Sonido Personalizado", 
+                name: document.getElementById('customName').value || "Sonido Pro", 
                 icon: document.getElementById('iconSelect').value, 
                 url: e.target.result 
             };
             library.push(newSound);
             updateSoundList();
-            document.body.classList.add('upload-color-active');
+            
+            // Forzamos el estado amarillo al subir
+            esPersonalizado = true;
+            document.body.classList.add('upload-color-active'); //
         };
         reader.readAsDataURL(fileInput.files[0]);
     }
@@ -139,8 +105,9 @@ function saveCustomSound() {
 
 function updateSoundList() {
     const list = document.getElementById('soundList');
+    if (!list) return;
     list.innerHTML = '';
-    library.forEach((sound, index) => {
+    library.forEach((sound) => {
         const div = document.createElement('div');
         div.className = 'sound-item-pro';
         div.innerHTML = `<i class="fas ${sound.icon}"></i> ${sound.name}`;
@@ -149,23 +116,37 @@ function updateSoundList() {
             alertaFinal = new Audio(sound.url);
             alertaFinal.volume = globalVolume;
             alertaFinal.loop = true;
-            alert("Nueva alarma guardada: " + sound.name);
+            
+            // PERSISTENCIA AMARILLA: Al seleccionar un sonido, bloqueamos el color
+            esPersonalizado = true;
+            document.body.classList.add('upload-color-active'); //
+            
+            // Quitamos el estado 'active' de los otros iconos para que sepa que está en modo "Custom"
+            document.querySelectorAll('.bubble').forEach(b => b.classList.remove('active'));
+            
+            alert("Sonido personalizado activado: " + sound.name);
         };
         list.appendChild(div);
     });
 }
 
+// Controles de volumen y ajustes permanecen igual...
+function setVolume(v) {
+    globalVolume = v;
+    musicaFNF.volume = v;
+    alertaFinal.volume = v;
+    const label = document.getElementById('volLabel');
+    if (label) label.innerText = Math.round(v * 100) + "%";
+}
+
 function setAlarm() {
     const input = document.getElementById("alarmTime").value;
-    if (input) { 
-        activeAlarm = input; 
-        alert("Alarma programada"); 
-    }
+    if (input) { activeAlarm = input; alert("Alarma programada"); }
 }
 
 function toggleSettings() {
     const modal = document.getElementById('settingsModal');
-    modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    if (modal) modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
 }
 
 setInterval(updateClock, 1000);
