@@ -3,13 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reloj Digital Pro</title>
+    <title>Reloj Neón Pro</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="tema-normal">
 
     <div class="app-wrapper">
+        <aside class="bubble-panel" id="volumePanel">
+            <div class="bubble vol-bubble" onclick="manualVolume()" title="Volumen">
+                <span id="volLabel">100%</span>
+            </div>
+            
+            <div class="menu-bubbles">
+                <button onclick="cambiarTema('normal')" class="bubble active" id="btnNormal" title="Modo Normal">
+                    <i class="fas fa-ghost"></i>
+                </button>
+                <button onclick="cambiarTema('fnf')" class="bubble" id="btnFNF" title="Modo FNF">
+                    <i class="fas fa-microphone-alt"></i>
+                </button>
+                <button onclick="toggleMute()" class="bubble" id="muteBtn">
+                    <i id="speakerIcon" class="fas fa-volume-up"></i>
+                </button>
+            </div>
+
+            <button class="bubble settings-bubble" onclick="toggleSettings()" title="Configurar Sonidos">
+                <i class="fas fa-music"></i>
+            </button>
+        </aside>
+
         <main class="main-content">
             <div class="clock-circle" id="clockWrapper">
                 <div class="time-display">
@@ -18,6 +40,10 @@
                 </div>
                 <h1 class="titulo-reloj" id="titulo">Reloj Digital</h1>
                 
+                <div id="currentAlarmInfo" class="alarm-badge" style="display:none;">
+                    <i id="activeAlarmIcon" class="fas fa-bell"></i> <span id="activeAlarmName">Alarma</span>
+                </div>
+
                 <div class="controls">
                     <input type="time" id="alarmTime">
                     <div class="button-group">
@@ -28,35 +54,28 @@
                 </div>
             </div>
         </main>
-
-        <aside class="floating-panel" id="volumePanel">
-            <div class="panel-header">
-                <i class="fas fa-sliders-h"></i>
-                <span id="volLabel">100%</span>
-            </div>
-            <nav class="menu-items">
-                <button onclick="cambiarTema('normal')" class="menu-btn active" id="btnNormal" title="Modo Normal">
-                    <i class="fas fa-ghost"></i>
-                </button>
-                <button onclick="cambiarTema('fnf')" class="menu-btn" id="btnFNF" title="Modo FNF">
-                    <i class="fas fa-microphone-alt"></i>
-                </button>
-                <button onclick="toggleMute()" class="menu-btn" id="muteBtn">
-                    <i id="speakerIcon" class="fas fa-volume-up"></i>
-                </button>
-            </nav>
-            <div class="panel-footer" onclick="toggleSettings()" style="cursor:pointer;">
-                <i class="fas fa-cog"></i>
-            </div>
-        </aside>
     </div>
 
     <div id="settingsModal" class="modal">
         <div class="modal-content">
-            <h3>Personalizar Alarma</h3>
-            <p>Sube tu propio sonido de alerta:</p>
-            <input type="file" id="userAudioInput" accept="audio/*">
-            <button onclick="toggleSettings()" class="btn-neon">Cerrar</button>
+            <h3>Biblioteca de Alertas</h3>
+            <div class="upload-section">
+                <input type="text" id="customName" placeholder="Nombre del sonido...">
+                <select id="iconSelect">
+                    <option value="fa-bell">🔔 Campana</option>
+                    <option value="fa-bolt">⚡ Rayo</option>
+                    <option value="fa-fire">🔥 Fuego</option>
+                    <option value="fa-heart">❤️ Corazón</option>
+                    <option value="fa-star">⭐ Estrella</option>
+                </select>
+                <input type="file" id="userAudioInput" accept="audio/*">
+                <button onclick="saveCustomSound()" class="btn-neon">Guardar Sonido</button>
+            </div>
+            
+            <div id="soundList" class="sound-grid">
+                </div>
+            
+            <button onclick="toggleSettings()" class="btn-neon close-btn">Cerrar</button>
         </div>
     </div>
 

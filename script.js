@@ -2,60 +2,72 @@ let timeOffset = 0;
 let activeAlarm = null;
 let isMuted = false;
 let currentTema = 'normal';
+let library = []; // Aquí guardaremos los sonidos del usuario
 
-// Sonidos base
-let musicaFNF = new Audio('alarmamusica.mp3'); //
+// Sonidos iniciales
+let musicaFNF = new Audio('alarmamusica.mp3');
 musicaFNF.loop = true;
+let alertaFinal = new Audio('alarmaterminar.mp3');
 
-let alertaFinal = new Audio('alarmaterminar.mp3'); //
-const alertaNormal = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+// 1. Guardar sonido personalizado
+function saveCustomSound() {
+    const file = document.getElementById('userAudioInput').files[0];
+    const name = document.getElementById('customName').value || "Mi Sonido";
+    const icon = document.getElementById('iconSelect').value;
 
-// 1. Control de Volumen con la Rueda (Scroll) sobre el panel
-const panel = document.getElementById('volumePanel');
-const volLabel = document.getElementById('volLabel');
-
-panel.addEventListener('wheel', (event) => {
-    event.preventDefault();
-    let change = event.deltaY > 0 ? -0.05 : 0.05;
-    let newVol = Math.min(1, Math.max(0, musicaFNF.volume + change));
-    
-    musicaFNF.volume = newVol;
-    alertaFinal.volume = newVol;
-    alertaNormal.volume = newVol;
-    
-    volLabel.innerText = Math.round(newVol * 100) + "%";
-});
-
-// 2. Personalización de Alarma (Subir audio)
-const userAudioInput = document.getElementById('userAudioInput');
-userAudioInput.addEventListener('change', function() {
-    const file = this.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
-            alertaFinal = new Audio(e.target.result); // Reemplaza el sonido de la alarma
-            alert("¡Sonido de alarma personalizado cargado!");
+        reader.onload = (e) => {
+            const newSound = { name, icon, url: e.target.result };
+            library.push(newSound);
+            updateSoundList();
+            alert(`Sonido "${name}" guardado en la biblioteca.`);
         };
         reader.readAsDataURL(file);
+    } else {
+        alert("Selecciona un archivo primero.");
     }
+}
+
+function updateSoundList() {
+    const list = document.getElementById('soundList');
+    list.innerHTML = '';
+    library.forEach((sound, index) => {
+        const div = document.createElement('div');
+        div.className = 'sound-item';
+        div.innerHTML = `<i class="fas ${sound.icon}"></i> ${sound.name}`;
+        div.onclick = () => selectAlarma(index);
+        list.appendChild(div);
+    });
+}
+
+function selectAlarma(index) {
+    const sound = library[index];
+    alertaFinal = new Audio(sound.url);
+    document.getElementById('activeAlarmName').innerText = sound.name;
+    document.getElementById('activeAlarmIcon').className = `fas ${sound.icon}`;
+    document.getElementById('currentAlarmInfo').style.display = 'block';
+    alert(`Alarma establecida con: ${sound.name}`);
+}
+
+// 2. Control de Volumen (Rueda y Manual)
+document.getElementById('volumePanel').addEventListener('wheel', (e) => {
+    e.preventDefault();
+    let change = e.deltaY > 0 ? -0.05 : 0.05;
+    setVolume(Math.min(1, Math.max(0, musicaFNF.volume + change)));
 });
 
-function toggleSettings() {
-    const modal = document.getElementById('settingsModal');
-    modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+function manualVolume() {
+    let input = prompt("Volumen (0-100):", musicaFNF.volume * 100);
+    if (input !== null) setVolume(parseInt(input) / 100);
 }
 
-// Lógica de temas y reloj (se mantiene similar)
-function cambiarTema(tema) {
-    currentTema = tema;
-    document.body.className = 'tema-' + tema;
-    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(tema === 'fnf' ? 'btnFNF' : 'btnNormal').classList.add('active');
-    
-    musicaFNF.pause();
-    if (tema === 'fnf' && !isMuted) musicaFNF.play();
+function setVolume(v) {
+    musicaFNF.volume = v; alertaFinal.volume = v;
+    document.getElementById('volLabel').innerText = Math.round(v * 100) + "%";
 }
 
+// 3. Reloj y Alarma
 function updateClock() {
     let now = new Date();
     now.setMilliseconds(now.getMilliseconds() + timeOffset);
@@ -67,16 +79,38 @@ function updateClock() {
 
     if (activeAlarm === currentTime24) {
         musicaFNF.pause();
-        (currentTema === 'fnf' ? alertaFinal : alertaNormal).play(); //
+        alertaFinal.play();
         document.getElementById("clockWrapper").classList.add("alarm-ringing");
         document.getElementById("stopBtn").style.display = "block";
     }
 }
 
+// Resto de funciones (cambiarTema, setAlarm, stopAlarm, toggleMute, etc)
+function cambiarTema(t) {
+    currentTema = t; document.body.className = 'tema-' + t;
+    document.querySelectorAll('.bubble').forEach(b => b.classList.remove('active'));
+    document.getElementById(t === 'fnf' ? 'btnFNF' : 'btnNormal').classList.add('active');
+    musicaFNF.pause();
+    if (t === 'fnf' && !isMuted) musicaFNF.play().catch(() => {});
+}
+
+function setAlarm() { activeAlarm = document.getElementById("alarmTime").value; alert("Alarma lista"); }
+function setClockTime() {
+    const input = document.getElementById("alarmTime").value;
+    if(input) {
+        let [h, m] = input.split(':');
+        let target = new Date(); target.setHours(h, m, 0);
+        timeOffset = target - new Date();
+    }
+}
+
+function toggleSettings() {
+    const modal = document.getElementById('settingsModal');
+    modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+}
+
 function stopAlarm() {
-    activeAlarm = null;
-    alertaFinal.pause(); alertaFinal.currentTime = 0; //
-    alertaNormal.pause(); alertaNormal.currentTime = 0;
+    activeAlarm = null; alertaFinal.pause(); alertaFinal.currentTime = 0;
     document.getElementById("clockWrapper").classList.remove("alarm-ringing");
     document.getElementById("stopBtn").style.display = "none";
     if (currentTema === 'fnf' && !isMuted) musicaFNF.play();
@@ -87,16 +121,6 @@ function toggleMute() {
     const icon = document.getElementById("speakerIcon");
     if (isMuted) { musicaFNF.pause(); icon.className = "fas fa-volume-mute"; }
     else { if (currentTema === 'fnf') musicaFNF.play(); icon.className = "fas fa-volume-up"; }
-}
-
-function setAlarm() { activeAlarm = document.getElementById("alarmTime").value; alert("Alarma guardada"); }
-function setClockTime() {
-    const input = document.getElementById("alarmTime").value;
-    if(input) {
-        let [h, m] = input.split(':');
-        let target = new Date(); target.setHours(h, m, 0);
-        timeOffset = target - new Date();
-    }
 }
 
 setInterval(updateClock, 1000);
