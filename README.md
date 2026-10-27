@@ -1,16 +1,13 @@
-# Clock digital
+# Digital Clock
 
-Reloj interactivo con estética neon y sistema de alarmas personalizables.
+An interactive clock with a neon aesthetic and a customizable alarm system.
 
-## Funciones
-* **Temas Visuales:** Cambia entre modo Fantasma (Azul) y rosado (FNF).
-* **Alarma Base:** Sonido `ding.mp3` predeterminado para el modo azul.
-* **Personalizacion:** Sube tus propios audios y gestiona tu biblioteca con iconos.
-* **Audio:** Control de volumen, mute y repeticion infinita.
-* **diseño:** El diseño cambia a amarillo neon al guardar nuevos sonidos.
+## Features
+* **Visual Themes:** Switch between "Ghost" mode (blue) and "FNF" mode (pink).
+* **Default Alarm:** Uses the `ding.mp3` sound file for the blue mode.
+* **Customization:** Upload your own audio files and manage your library using icons.
+* **Audio:** Volume control, mute, and infinite repeat.
+* **Design:** The interface shifts to neon yellow when saving new sounds.
 
-## Tecnologias
-* HTML5, CSS3 (Efectos Glow) y JavaScript vanilla.
-
-## Autora
-Desarrollado por **yiyihernandez** :D
+## Technologies
+* HTML5, CSS3 (glow effects), and vanilla JS.
